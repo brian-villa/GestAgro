@@ -2,7 +2,7 @@ from backend.models import LocationModel
 import datetime
 import uuid
 
-class Forecast:
+class ForecastModel:
     def __init__(self, location: LocationModel, date, temperature, humidity, precipation, rain_probability):
         self._id = uuid.uuid4()
         self.location = location

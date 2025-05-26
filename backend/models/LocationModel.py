@@ -7,7 +7,7 @@ from pathlib import Path
 dotenv_path = Path(__file__).resolve().parents[1] / "env" / ".env.local"
 load_dotenv(dotenv_path)
 
-class Location:
+class LocationModel:
     @staticmethod
     def name_to_geolocation(name, key):
         url = f"https://api.opencagedata.com/geocode/v1/json?q={name}&key={key}"

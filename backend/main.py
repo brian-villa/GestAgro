@@ -1,4 +1,4 @@
-from models.location import Location
+from models.LocationModel import Location
 
 def main():
     place = "Aguçadoura"

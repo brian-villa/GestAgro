@@ -1,5 +1,6 @@
 import requests
 import os
+import uuid
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -21,12 +22,17 @@ class Location:
             return f"localização {name} não encontrada"
         
     def __init__(self, place):
+        self._id = uuid.uuid4()
         self._place = place
         self._lat = None
         self._lon = None
         self._forecasts = []
 
         self.set_value()
+
+    @property
+    def id(self):
+        return self._id
 
     @property
     def place(self):
@@ -36,7 +42,7 @@ class Location:
     def place(self, new_place):
         if not isinstance(new_place, str) or len(new_place.strip()) == 0:
             return ValueError("Nome não pode ser uma string vazia")
-        self_place = new_place
+        self._place = new_place
         self.set_value()
 
     @property

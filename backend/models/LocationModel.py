@@ -41,7 +41,7 @@ class LocationModel:
     @place.setter
     def place(self, new_place):
         if not isinstance(new_place, str) or len(new_place.strip()) == 0:
-            return ValueError("Nome não pode ser uma string vazia")
+            return ValueError("É preciso um lugar para obter uma previsão do tempo!")
         self._place = new_place
         self.set_value()
 
@@ -61,6 +61,15 @@ class LocationModel:
         lat, lon = self.name_to_geolocation(self._place, key)
         self._lat = lat
         self._lon = lon
+    
+    def __str__(self):
+         return (f"LocationModel(\n"
+            f"  ID: {self._id}\n"
+            f"  Place: '{self._place}'\n"
+            f"  Latitude: {self._lat}\n"
+            f"  Longitude: {self._lon}\n"
+            f"  Forecasts: {len(self._forecasts)} registered forecasts\n"
+            f")")
 
     
 

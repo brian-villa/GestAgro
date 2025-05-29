@@ -20,7 +20,6 @@ class TempLocationModel:
     def place(self, new_place):
         self._place = new_place
         
-    
     @latitude.setter
     def latitude(self, new_lat):
         self._lat = new_lat

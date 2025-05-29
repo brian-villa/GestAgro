@@ -1,11 +1,10 @@
 from models import ForecastModel
+from strategies import SuggestionStrategy
 
 class SuggestionModel:
-    def __init__(self, forecast: ForecastModel, action_suggest):
-        self._forecast = forecast
-        self._action_suggest = action_suggest
+    def __init__(self, forecasts: ForecastModel, strategy: SuggestionStrategy):
+        self._forecast = [forecasts]
+        self._strategy = strategy
 
-    
-    
     def run(self) -> str:
-        return self._action_suggest.get_suggest(self._forecast)
+        return self._strategy.get_suggest(self._forecast)

@@ -22,17 +22,11 @@ class LocationModel:
             return f"localização {name} não encontrada"
         
     def __init__(self, place):
-        self._id = uuid.uuid4()
         self._place = place
         self._lat = None
         self._lon = None
-        self._forecasts = []
 
         self.set_value()
-
-    @property
-    def id(self):
-        return self._id
 
     @property
     def place(self):
@@ -53,6 +47,7 @@ class LocationModel:
     def longitude(self):
         return self._lon
     
+    
     def set_value(self):
         key = os.getenv("API_GEOLOCATION")
         if not key:
@@ -64,11 +59,9 @@ class LocationModel:
     
     def __str__(self):
          return (f"LocationModel(\n"
-            f"  ID: {self._id}\n"
             f"  Place: '{self._place}'\n"
             f"  Latitude: {self._lat}\n"
             f"  Longitude: {self._lon}\n"
-            f"  Forecasts: {len(self._forecasts)} registered forecasts\n"
             f")")
 
     

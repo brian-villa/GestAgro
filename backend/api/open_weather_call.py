@@ -22,17 +22,27 @@ def get_forecast_open_weather(location):
     forecast_data = response.json()
 
     print(forecast_data)
+
     
+    date = forecast_data["dt"]
+    dt_converted = datetime.fromtimestamp(date)
+
     temperature = forecast_data["main"]["temp"]
     humidity = forecast_data["main"]["humidity"]
     precipitation = forecast_data.get("rain", {}.get("1h", 0.0))
     rain_probability = forecast_data.get("clouds", {}).get("all", 0)
     wind_speed = forecast_data.get("wind", {}.get("speed", 0.0))
 
+    location_api = forecast_data["name"]
+
+    if not location.place:
+        location.place = location_api
+        
+
     #criar objeto Forecast
     forecast = ForecastModel(
         location = location,
-        date = datetime.now,
+        date = dt_converted,
         temperature = temperature,
         humidity = humidity,
         precipitation = precipitation,

@@ -1,6 +1,6 @@
 from models.LocationModel import LocationModel
 from api import open_weather_call
-from strategies.SuggestionStrategy import WindStrategy, RainStrategy, PlantingStrategy, HarvestStrategy
+from strategies.SuggestionStrategy import WindStrategy, RainStrategy, TemperatureStrategy, HumidityStrategy, PrecipitationStrategy
 from models.SuggestionModel import SuggestionModel
 
 def main():
@@ -17,8 +17,9 @@ def main():
     strategies = [
         ("Vento", WindStrategy()),
         ("Chuva", RainStrategy()),
-        ("Plantar", PlantingStrategy()),
-        ("Colheita", HarvestStrategy())
+        ("Temperatura", TemperatureStrategy()),
+        ("Humidade", HumidityStrategy()),
+        ("Precipitação", PrecipitationStrategy())
     ]
 
     for name, strategy in strategies:

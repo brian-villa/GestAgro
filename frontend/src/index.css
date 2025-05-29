@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+
+body{
+  font-family: "Archivo", sans-serif;
+  background-color:#2b2d42 ;
+  color:#edf2f4;
+}

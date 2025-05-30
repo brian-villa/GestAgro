@@ -22,17 +22,11 @@ class LocationModel:
             return f"localização {name} não encontrada"
         
     def __init__(self, place):
-        self._id = uuid.uuid4()
         self._place = place
         self._lat = None
         self._lon = None
-        self._forecasts = []
 
         self.set_value()
-
-    @property
-    def id(self):
-        return self._id
 
     @property
     def place(self):
@@ -41,7 +35,7 @@ class LocationModel:
     @place.setter
     def place(self, new_place):
         if not isinstance(new_place, str) or len(new_place.strip()) == 0:
-            return ValueError("Nome não pode ser uma string vazia")
+            return ValueError("É preciso um lugar para obter uma previsão do tempo!")
         self._place = new_place
         self.set_value()
 
@@ -53,6 +47,7 @@ class LocationModel:
     def longitude(self):
         return self._lon
     
+    
     def set_value(self):
         key = os.getenv("API_GEOLOCATION")
         if not key:
@@ -61,6 +56,13 @@ class LocationModel:
         lat, lon = self.name_to_geolocation(self._place, key)
         self._lat = lat
         self._lon = lon
+    
+    def __str__(self):
+         return (f"LocationModel(\n"
+            f"  Place: '{self._place}'\n"
+            f"  Latitude: {self._lat}\n"
+            f"  Longitude: {self._lon}\n"
+            f")")
 
     
 

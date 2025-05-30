@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>backend.strategies.SuggestionStrategy module &#8212; GestAgro Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="backend.tests package" href="backend.tests.html" />
+    <link rel="prev" title="backend.strategies package" href="backend.strategies.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-backend.strategies.SuggestionStrategy">
+<span id="backend-strategies-suggestionstrategy-module"></span><h1>backend.strategies.SuggestionStrategy module<a class="headerlink" href="#module-backend.strategies.SuggestionStrategy" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.SuggestionStrategy">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.strategies.SuggestionStrategy.</span></span><span class="sig-name descname"><span class="pre">SuggestionStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#SuggestionStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Classe abstrata base para definir estratégias de sugestão com base em uma previsão meteorológica.</p>
+<p>Cada estratégia define uma mensagem, um ícone e uma prioridade com base nos dados fornecidos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> – Texto explicativo da sugestão.</p></li>
+<li><p><strong>icon</strong> – Ícone representativo (compatível com bibliotecas como Weather Icons).</p></li>
+<li><p><strong>priority</strong> – Nível de prioridade da sugestão (1 a 5).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.SuggestionStrategy.get_suggest">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_suggest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forecast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="backend.models.ForecastModel.html#backend.models.ForecastModel.ForecastModel" title="backend.models.ForecastModel.ForecastModel"><span class="pre">ForecastModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#SuggestionStrategy.get_suggest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy.get_suggest" title="Link to this definition">¶</a></dt>
+<dd><p>Método abstrato que deve ser implementado para gerar sugestões.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>forecast</strong> – Instância de ForecastModel.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dicionário com as chaves: message, icon, priority.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.SuggestionStrategy.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#SuggestionStrategy.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy.__init__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.SuggestionStrategy.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#SuggestionStrategy.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy.to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Converte os dados da sugestão para um dicionário.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict com as chaves “message”, “icon” e “priority”.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.WindStrategy">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.strategies.SuggestionStrategy.</span></span><span class="sig-name descname"><span class="pre">WindStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#WindStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.WindStrategy" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy" title="backend.strategies.SuggestionStrategy.SuggestionStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuggestionStrategy</span></code></a></p>
+<p>Estratégia baseada na velocidade do vento para gerar sugestões meteorológicas.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.WindStrategy.get_suggest">
+<span class="sig-name descname"><span class="pre">get_suggest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forecast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="backend.models.ForecastModel.html#backend.models.ForecastModel.ForecastModel" title="backend.models.ForecastModel.ForecastModel"><span class="pre">ForecastModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#WindStrategy.get_suggest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.WindStrategy.get_suggest" title="Link to this definition">¶</a></dt>
+<dd><p>Gera sugestão com base na velocidade do vento.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>forecast</strong> – Instância de ForecastModel.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dicionário com sugestão relacionada ao vento.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.RainStrategy">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.strategies.SuggestionStrategy.</span></span><span class="sig-name descname"><span class="pre">RainStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#RainStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.RainStrategy" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy" title="backend.strategies.SuggestionStrategy.SuggestionStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuggestionStrategy</span></code></a></p>
+<p>Estratégia baseada na probabilidade de chuva.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.RainStrategy.get_suggest">
+<span class="sig-name descname"><span class="pre">get_suggest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forecast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="backend.models.ForecastModel.html#backend.models.ForecastModel.ForecastModel" title="backend.models.ForecastModel.ForecastModel"><span class="pre">ForecastModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#RainStrategy.get_suggest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.RainStrategy.get_suggest" title="Link to this definition">¶</a></dt>
+<dd><p>Gera sugestão com base na probabilidade de chuva.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>forecast</strong> – Instância de ForecastModel.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dicionário com sugestão relacionada à chuva.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.TemperatureStrategy">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.strategies.SuggestionStrategy.</span></span><span class="sig-name descname"><span class="pre">TemperatureStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#TemperatureStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.TemperatureStrategy" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy" title="backend.strategies.SuggestionStrategy.SuggestionStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuggestionStrategy</span></code></a></p>
+<p>Estratégia baseada na temperatura ambiente.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.TemperatureStrategy.get_suggest">
+<span class="sig-name descname"><span class="pre">get_suggest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forecast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="backend.models.ForecastModel.html#backend.models.ForecastModel.ForecastModel" title="backend.models.ForecastModel.ForecastModel"><span class="pre">ForecastModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#TemperatureStrategy.get_suggest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.TemperatureStrategy.get_suggest" title="Link to this definition">¶</a></dt>
+<dd><p>Gera sugestão com base na temperatura.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>forecast</strong> – Instância de ForecastModel.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dicionário com sugestão relacionada à temperatura.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.PrecipitationStrategy">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.strategies.SuggestionStrategy.</span></span><span class="sig-name descname"><span class="pre">PrecipitationStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#PrecipitationStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.PrecipitationStrategy" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy" title="backend.strategies.SuggestionStrategy.SuggestionStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuggestionStrategy</span></code></a></p>
+<p>Estratégia baseada na precipitação acumulada (chuva).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.PrecipitationStrategy.get_suggest">
+<span class="sig-name descname"><span class="pre">get_suggest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forecast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="backend.models.ForecastModel.html#backend.models.ForecastModel.ForecastModel" title="backend.models.ForecastModel.ForecastModel"><span class="pre">ForecastModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#PrecipitationStrategy.get_suggest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.PrecipitationStrategy.get_suggest" title="Link to this definition">¶</a></dt>
+<dd><p>Gera sugestão com base na precipitação.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>forecast</strong> – Instância de ForecastModel.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dicionário com sugestão relacionada à precipitação.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.HumidityStrategy">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.strategies.SuggestionStrategy.</span></span><span class="sig-name descname"><span class="pre">HumidityStrategy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#HumidityStrategy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.HumidityStrategy" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#backend.strategies.SuggestionStrategy.SuggestionStrategy" title="backend.strategies.SuggestionStrategy.SuggestionStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuggestionStrategy</span></code></a></p>
+<p>Estratégia baseada no nível de umidade relativa do ar.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.strategies.SuggestionStrategy.HumidityStrategy.get_suggest">
+<span class="sig-name descname"><span class="pre">get_suggest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forecast</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="backend.models.ForecastModel.html#backend.models.ForecastModel.ForecastModel" title="backend.models.ForecastModel.ForecastModel"><span class="pre">ForecastModel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/backend/strategies/SuggestionStrategy.html#HumidityStrategy.get_suggest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.strategies.SuggestionStrategy.HumidityStrategy.get_suggest" title="Link to this definition">¶</a></dt>
+<dd><p>Gera sugestão com base na umidade relativa.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>forecast</strong> – Instância de ForecastModel.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dicionário com sugestão relacionada à umidade.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">GestAgro</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Módulos do Sistema:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">backend</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Componentes Principais:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="backend.main.html">backend.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.api.html">backend.api package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.controllers.html">backend.controllers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.models.html">backend.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.server.html">backend.server package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="backend.strategies.html">backend.strategies package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">backend</a><ul>
+  <li><a href="backend.html">backend package</a><ul>
+  <li><a href="backend.strategies.html">backend.strategies package</a><ul>
+      <li>Previous: <a href="backend.strategies.html" title="previous chapter">backend.strategies package</a></li>
+      <li>Next: <a href="backend.tests.html" title="next chapter">backend.tests package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Seu Nome.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/backend.strategies.SuggestionStrategy.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

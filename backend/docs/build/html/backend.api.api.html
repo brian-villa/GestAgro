@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>backend.api.api module &#8212; GestAgro Documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=8d563738"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="backend.api.body_data module" href="backend.api.body_data.html" />
+    <link rel="prev" title="backend.api package" href="backend.api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-backend.api.api">
+<span id="backend-api-api-module"></span><h1>backend.api.api module<a class="headerlink" href="#module-backend.api.api" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="backend.api.api.FlaskAPI">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">backend.api.api.</span></span><span class="sig-name descname"><span class="pre">FlaskAPI</span></span><a class="reference internal" href="_modules/backend/api/api.html#FlaskAPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.api.api.FlaskAPI" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Classe para configuração e inicialização da aplicação Flask com CORS e Blueprints.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="backend.api.api.FlaskAPI.app">
+<span class="sig-name descname"><span class="pre">app</span></span><a class="headerlink" href="#backend.api.api.FlaskAPI.app" title="Link to this definition">¶</a></dt>
+<dd><p>Instância da aplicação Flask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flask</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.api.api.FlaskAPI.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/api/api.html#FlaskAPI.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.api.api.FlaskAPI.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Inicializa a aplicação Flask, habilita CORS e registra os Blueprints de rotas.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="backend.api.api.FlaskAPI.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/backend/api/api.html#FlaskAPI.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#backend.api.api.FlaskAPI.run" title="Link to this definition">¶</a></dt>
+<dd><p>Executa a aplicação Flask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>debug</strong> (<em>bool</em>) – Habilita modo debug para facilitar desenvolvimento.</p></li>
+<li><p><strong>use_reloader</strong> (<em>bool</em>) – Evita execução múltipla durante reload automático.</p></li>
+<li><p><strong>port</strong> (<em>int</em>) – Porta em que a aplicação será executada.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">GestAgro</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Módulos do Sistema:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">backend</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Componentes Principais:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="backend.main.html">backend.main module</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="backend.api.html">backend.api package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.controllers.html">backend.controllers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.models.html">backend.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.server.html">backend.server package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.strategies.html">backend.strategies package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">backend</a><ul>
+  <li><a href="backend.html">backend package</a><ul>
+  <li><a href="backend.api.html">backend.api package</a><ul>
+      <li>Previous: <a href="backend.api.html" title="previous chapter">backend.api package</a></li>
+      <li>Next: <a href="backend.api.body_data.html" title="next chapter">backend.api.body_data module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Seu Nome.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/backend.api.api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -12,8 +12,9 @@ function Header(){
                 src={isHovered ? LogoHover : Logo}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
+                onClick={() => location.reload()}
                 alt="Logo do WeatherWatcher"
-                className="h-20 transition-all ease-in-out hover:scale-105"   
+                className="h-25 cursor-pointer transition-all ease-in-out hover:scale-105"   
             />
         </div>
     )

@@ -73,6 +73,8 @@ class WebSocketServer:
                         "temperature": forecast.temperature,
                         "minTemperature": forecast.minTemperature,
                         "maxTemperature": forecast.maxTemperature,
+                        "sunrise": forecast.sunrise.isoformat() if forecast.sunrise else None,
+                        "sunset": forecast.sunset.isoformat() if forecast.sunset else None,
                         "humidity": forecast.humidity,
                         "precipitation": forecast.precipitation,
                         "rain_probability": forecast.rain_probability,

@@ -75,7 +75,9 @@ def location():
                 "humidity": forecast.humidity,
                 "precipitation": forecast.precipitation,
                 "rain_probability": forecast.rain_probability,
-                "wind_speed": forecast.wind_speed
+                "wind_speed": forecast.wind_speed,
+                "sunrise": forecast.sunrise.isoformat() if forecast.sunrise else None,
+                "sunset": forecast.sunset.isoformat() if forecast.sunset else None
             },
             "daily_forecast": daily_forecast,
             "suggestions": suggestions

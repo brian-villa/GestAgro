@@ -48,6 +48,9 @@ def get_forecast_open_weather(location):
     precipitation = forecast_data.get("rain", {}).get("1h", 0.0)
     rain_probability = forecast_data.get("clouds", {}).get("all", 0)
     wind_speed = forecast_data.get("wind", {}).get("speed", 0.0)
+    sys_data = forecast_data.get("sys", {})
+    sunrise = datetime.fromtimestamp(sys_data.get("sunrise")) if "sunrise" in sys_data else None
+    sunset = datetime.fromtimestamp(sys_data.get("sunset")) if "sunset" in sys_data else None
 
     location_api = forecast_data["name"]
 
@@ -63,11 +66,14 @@ def get_forecast_open_weather(location):
         temperature = temperature,
         minTemperature = minTemperature,
         maxTemperature = maxTemperature,
+        sunrise = sunrise,
+        sunset = sunset,
         humidity = humidity,
         precipitation = precipitation,
         rain_probability = rain_probability,
         wind_speed = wind_speed
     )
+
 
     return forecast
 
@@ -98,6 +104,9 @@ def forecast_weekly(location):
         weekly_data = response.json()
 
         forecast_list = []
+        city_data = weekly_data.get("city", {})
+        sunrise = datetime.fromtimestamp(city_data.get("sunrise")) if city_data.get("sunrise") else None
+        sunset = datetime.fromtimestamp(city_data.get("sunset")) if city_data.get("sunset") else None
 
         # Itera sobre a lista de previsões retornada pela API
         for item in weekly_data.get("list", []):
@@ -116,6 +125,8 @@ def forecast_weekly(location):
                 temperature=main.get("temp", 0.0),
                 minTemperature=main.get("temp_min", 0.0),
                 maxTemperature=main.get("temp_max", 0.0),
+                sunrise=sunrise,
+                sunset=sunset,
                 humidity=main.get("humidity", 0),
                 precipitation=rain.get("3h", 0.0),
                 rain_probability=clouds.get("all", 0),

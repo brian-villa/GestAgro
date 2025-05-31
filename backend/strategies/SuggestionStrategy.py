@@ -51,7 +51,7 @@ class WindStrategy(SuggestionStrategy):
         :param forecast: Instância de ForecastModel.
         :return: Dicionário com sugestão relacionada ao vento.
         """
-        wind_speed = forecast.wind_speed["speed"]
+        wind_speed = forecast.wind_speed
 
         if wind_speed > 40:
             self.message = "Ventos extremos."

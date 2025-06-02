@@ -62,7 +62,7 @@ function Index() {
 
       <div
         className={`w-2/4 h-3/6 border-2 mt-4 rounded-lg shadow-lg transition-all duration-350 ease-in-out hover:scale-108 ${
-          fadeInMapa ? "opacity-100" : "opacity-0"
+          fadeInMapa ? "opacity-100" : "opacity-1"
         }`}
       >
         <Mapa />

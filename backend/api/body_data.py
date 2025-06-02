@@ -24,7 +24,7 @@ class BodyData:
         Returns:
             BodyData: Instância única da classe BodyData.
         """
-        with cls._lock:  # Garante exclusão mútua na criação da instância
+        with cls._lock:
             if cls._instance is None:
                 cls._instance = super(BodyData, cls).__new__(cls)
                 cls._instance.lock = Lock()  # Lock para controlar acesso aos atributos da instância

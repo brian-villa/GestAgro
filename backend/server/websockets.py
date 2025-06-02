@@ -32,21 +32,36 @@ class WebSocketServer:
         """
         while True:
             try:
-                # Protege o acesso aos dados compartilhados
+                try:
+                    message = await asyncio.wait_for(websocket.recv(), timeout=1)
+                    payload = json.loads(message)
+
+                    with body_data.lock:
+                        if "priority" in payload:
+                            body_data.priority = payload["priority"]
+
+                        if payload.get("type") == "forecast" and "latitude" in payload and "longitude" in payload:
+                            body_data.location = LocationFactory.from_lat_lon(
+                                payload["latitude"], payload["longitude"]
+                            )
+                        elif payload.get("type") == "location" and "place" in payload:
+                            body_data.location = LocationFactory.from_place(payload["place"])
+
+                except asyncio.TimeoutError:
+                    pass 
+
                 with body_data.lock:
                     location = body_data.location
                     priority = body_data.priority
 
-                # Se não há localização definida, espera 1 segundo e tenta novamente
+                # Se não há localização definida, espera 1 segundo
                 if location is None:
                     await asyncio.sleep(1)
                     continue
 
-                # Obtém previsão diária e semanal
                 forecast = ForecastFactory.dailyForecast(location=location)
                 week_forecast = ForecastFactory.weeklyForecast(location=location)
 
-                # Estratégias para sugestões baseadas na previsão
                 strategies = [
                     WindStrategy(),
                     RainStrategy(),
@@ -61,7 +76,7 @@ class WebSocketServer:
                     if s.get("priority", 0) >= priority
                 ]
 
-                # Monta o dicionário com dados para envio
+                # Monta o json com dados para envio
                 forecast_data = {
                     "location": {
                         "latitude": location.latitude,
@@ -117,7 +132,7 @@ class WebSocketServer:
                 elif payload.get("type") == "location" and "place" in payload:
                     body_data.location = LocationFactory.from_place(payload["place"])
                 else:
-                    await websocket.send(json.dumps({"error": "Parâmetros ausentes place, lat e lon"}))
+                    await websocket.send(json.dumps({"error": "Parâmetros ausentes (place, lat e lon)"}))
                     return
 
             print(f"Cliente conectado. Iniciando envio de dados para {body_data.location.place}")

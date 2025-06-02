@@ -1,43 +1,32 @@
-# from models.LocationModel import LocationModel
-# from api import open_weather_call
-# from strategies.SuggestionStrategy import WindStrategy, RainStrategy, TemperatureStrategy, HumidityStrategy, PrecipitationStrategy
-# from models.SuggestionModel import SuggestionModel
-from flask import Flask
-from controllers.ForecastController import forecast_flask
-from controllers.LocationController import location_flask
+import threading
+from api.api import FlaskAPI
+from server.websockets import WebSocketServer
 
-# def main():
-#     place = "Braga"
-#     location = LocationModel(place)
+def main():
+    """
+    Função principal para executar a aplicação Flask e o servidor WebSocket em threads paralelas.
 
-#     print(f"Local: {location.place}")
-#     print(f"Latitude: {location.latitude}")
-#     print(f"Longitude: {location.longitude}") 
+    Cria instâncias da API Flask e do servidor WebSocket, executando cada uma em uma thread
+    separada para permitir a execução simultânea dos dois servidores.
 
-#     forecast = open_weather_call.get_forecast_open_weather(location) 
-#     print(forecast)
+    As threads são iniciadas e o programa espera que ambas terminem (o que normalmente não ocorre,
+    pois ambos os servidores são contínuos).
 
-#     strategies = [
-#         ("Vento", WindStrategy()),
-#         ("Chuva", RainStrategy()),
-#         ("Temperatura", TemperatureStrategy()),
-#         ("Humidade", HumidityStrategy()),
-#         ("Precipitação", PrecipitationStrategy())
-#     ]
+    Returns:
+        None
+    """
+    flask_app = FlaskAPI()
+    ws_server = WebSocketServer()
 
-#     for name, strategy in strategies:
-#         suggestion = SuggestionModel(forecast, strategy)
-#         result = suggestion.run()
-#         print(f"\n{name}: {result}")
+    flask_thread = threading.Thread(target=flask_app.run)
+    ws_thread = threading.Thread(target=ws_server.run)
 
-# if __name__ == "__main__":
-#     main()
+    flask_thread.start()
+    ws_thread.start()
 
+    flask_thread.join()
+    ws_thread.join()
 
-app = Flask(__name__)
-app.register_blueprint(forecast_flask)
-app.register_blueprint(location_flask)
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    main()

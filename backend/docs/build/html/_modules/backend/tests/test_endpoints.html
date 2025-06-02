@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>backend.tests.test_endpoints &#8212; GestAgro Documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for backend.tests.test_endpoints</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">main</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span>
+
+<div class="viewcode-block" id="test_forecast_endpoint">
+<a class="viewcode-back" href="../../../backend.tests.test_endpoints.html#backend.tests.test_endpoints.test_forecast_endpoint">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_forecast_endpoint</span><span class="p">(</span><span class="n">mocker</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Testa o endpoint &#39;/forecast&#39; da API Flask.</span>
+
+<span class="sd">    Utiliza mocks para simular a criação de objetos Location e Forecast,</span>
+<span class="sd">    evitando chamadas reais à API externa ou à base de dados.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mocker: fixture do pytest-mock para aplicar mocks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Cria cliente de teste do Flask para simular requisições HTTP</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">main</span><span class="o">.</span><span class="n">test_client</span><span class="p">()</span>
+
+    <span class="c1"># Cria mock do objeto Location com atributos simulados</span>
+    <span class="n">mock_location</span> <span class="o">=</span> <span class="n">mocker</span><span class="o">.</span><span class="n">Mock</span><span class="p">()</span>
+    <span class="n">mock_location</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="mf">41.14</span>
+    <span class="n">mock_location</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">8.61</span>
+    <span class="n">mock_location</span><span class="o">.</span><span class="n">place</span> <span class="o">=</span> <span class="s2">&quot;Porto&quot;</span>
+    <span class="n">mock_location</span><span class="o">.</span><span class="n">to_dict</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;latitude&quot;</span><span class="p">:</span> <span class="mf">41.14</span><span class="p">,</span>
+        <span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">8.61</span><span class="p">,</span>
+        <span class="s2">&quot;place&quot;</span><span class="p">:</span> <span class="s2">&quot;Porto&quot;</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Cria mock do objeto Forecast com dados simulados</span>
+    <span class="n">mock_forecast</span> <span class="o">=</span> <span class="n">mocker</span><span class="o">.</span><span class="n">Mock</span><span class="p">()</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">date</span> <span class="o">=</span> <span class="s2">&quot;2025-05-29&quot;</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mf">25.5</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">minTemperature</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">maxTemperature</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">humidity</span> <span class="o">=</span> <span class="mi">60</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">precipitation</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">rain_probability</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">wind_speed</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">}</span>
+    <span class="n">mock_forecast</span><span class="o">.</span><span class="n">to_dict</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-05-29&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="mf">25.5</span><span class="p">,</span>
+        <span class="s2">&quot;minTemperature&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="s2">&quot;maxTemperature&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+        <span class="s2">&quot;humidity&quot;</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+        <span class="s2">&quot;precipitation&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;rain_probability&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;wind_speed&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="c1"># Lista simulada de previsão semanal com 7 elementos iguais ao mock_forecast</span>
+    <span class="n">mock_week</span> <span class="o">=</span> <span class="p">[</span><span class="n">mock_forecast</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">)]</span>
+
+    <span class="c1"># Substitui as funções da fábrica para retornar os mocks criados</span>
+    <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;models.factories.LocationFactory.LocationFactory.from_lat_lon&quot;</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="n">mock_location</span><span class="p">)</span>
+    <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;models.factories.ForecastFactory.ForecastFactory.dailyForecast&quot;</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="n">mock_forecast</span><span class="p">)</span>
+    <span class="n">mocker</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;models.factories.ForecastFactory.ForecastFactory.weeklyForecast&quot;</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="n">mock_week</span><span class="p">)</span>
+    
+    <span class="c1"># Faz requisição POST ao endpoint /forecast com dados de latitude e longitude</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/forecast&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;latitude&quot;</span><span class="p">:</span> <span class="mf">41.14</span><span class="p">,</span> <span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">8.61</span><span class="p">})</span>
+
+    <span class="c1"># Imprime a resposta para debug</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    
+    <span class="c1"># Verifica se o status HTTP é 200 (OK)</span>
+    <span class="k">assert</span> <span class="n">res</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span>
+
+    <span class="c1"># Verifica se o JSON de resposta contém a chave &#39;forecast&#39;</span>
+    <span class="k">assert</span> <span class="s2">&quot;forecast&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span>
+
+    <span class="c1"># Verifica se o JSON de resposta contém a chave &#39;suggestions&#39;</span>
+    <span class="k">assert</span> <span class="s2">&quot;suggestions&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">GestAgro</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Módulos do Sistema:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">backend</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Componentes Principais:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.main.html">backend.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.api.html">backend.api package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.controllers.html">backend.controllers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.models.html">backend.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.server.html">backend.server package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.strategies.html">backend.strategies package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Seu Nome.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>backend.server.websockets &#8212; GestAgro Documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=27fed22d" />
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for backend.server.websockets</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">websockets</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">api.body_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">BodyData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models.factories.LocationFactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocationFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">models.factories.ForecastFactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForecastFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">strategies.SuggestionStrategy</span><span class="w"> </span><span class="kn">import</span> <span class="n">WindStrategy</span><span class="p">,</span> <span class="n">RainStrategy</span><span class="p">,</span> <span class="n">TemperatureStrategy</span><span class="p">,</span> <span class="n">PrecipitationStrategy</span><span class="p">,</span> <span class="n">HumidityStrategy</span>
+
+<span class="n">body_data</span> <span class="o">=</span> <span class="n">BodyData</span><span class="p">()</span>
+
+<div class="viewcode-block" id="WebSocketServer">
+<a class="viewcode-back" href="../../../backend.server.websockets.html#backend.server.websockets.WebSocketServer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WebSocketServer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Classe que implementa um servidor WebSocket para envio contínuo de dados meteorológicos</span>
+<span class="sd">    e sugestões baseadas em localização e prioridade.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        host (str): Endereço onde o servidor irá escutar conexões (default: &quot;localhost&quot;).</span>
+<span class="sd">        port (int): Porta onde o servidor irá escutar conexões (default: 5001).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WebSocketServer.__init__">
+<a class="viewcode-back" href="../../../backend.server.websockets.html#backend.server.websockets.WebSocketServer.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5001</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_host</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_port</span> <span class="o">=</span> <span class="n">port</span></div>
+
+
+<div class="viewcode-block" id="WebSocketServer.send_update">
+<a class="viewcode-back" href="../../../backend.server.websockets.html#backend.server.websockets.WebSocketServer.send_update">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">send_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">websocket</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Envia periodicamente atualizações com dados de previsão do tempo e sugestões</span>
+<span class="sd">        para o cliente conectado via websocket.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            websocket: conexão websocket ativa.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Protege o acesso aos dados compartilhados</span>
+                <span class="k">with</span> <span class="n">body_data</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+                    <span class="n">location</span> <span class="o">=</span> <span class="n">body_data</span><span class="o">.</span><span class="n">location</span>
+                    <span class="n">priority</span> <span class="o">=</span> <span class="n">body_data</span><span class="o">.</span><span class="n">priority</span>
+
+                <span class="c1"># Se não há localização definida, espera 1 segundo e tenta novamente</span>
+                <span class="k">if</span> <span class="n">location</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Obtém previsão diária e semanal</span>
+                <span class="n">forecast</span> <span class="o">=</span> <span class="n">ForecastFactory</span><span class="o">.</span><span class="n">dailyForecast</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">location</span><span class="p">)</span>
+                <span class="n">week_forecast</span> <span class="o">=</span> <span class="n">ForecastFactory</span><span class="o">.</span><span class="n">weeklyForecast</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">location</span><span class="p">)</span>
+
+                <span class="c1"># Estratégias para sugestões baseadas na previsão</span>
+                <span class="n">strategies</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">WindStrategy</span><span class="p">(),</span>
+                    <span class="n">RainStrategy</span><span class="p">(),</span>
+                    <span class="n">TemperatureStrategy</span><span class="p">(),</span>
+                    <span class="n">PrecipitationStrategy</span><span class="p">(),</span>
+                    <span class="n">HumidityStrategy</span><span class="p">(),</span>
+                <span class="p">]</span>
+
+                <span class="c1"># Filtra sugestões por prioridade</span>
+                <span class="n">suggestions</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">strat</span><span class="o">.</span><span class="n">get_suggest</span><span class="p">(</span><span class="n">forecast</span><span class="p">)</span> <span class="k">for</span> <span class="n">strat</span> <span class="ow">in</span> <span class="n">strategies</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">priority</span>
+                <span class="p">]</span>
+
+                <span class="c1"># Monta o dicionário com dados para envio</span>
+                <span class="n">forecast_data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;latitude&quot;</span><span class="p">:</span> <span class="n">location</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span>
+                        <span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="n">location</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
+                        <span class="s2">&quot;place&quot;</span><span class="p">:</span> <span class="n">location</span><span class="o">.</span><span class="n">place</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;forecast&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">forecast</span><span class="o">.</span><span class="n">date</span><span class="p">),</span>
+                        <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
+                        <span class="s2">&quot;minTemperature&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">minTemperature</span><span class="p">,</span>
+                        <span class="s2">&quot;maxTemperature&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">maxTemperature</span><span class="p">,</span>
+                        <span class="s2">&quot;humidity&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">humidity</span><span class="p">,</span>
+                        <span class="s2">&quot;precipitation&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">precipitation</span><span class="p">,</span>
+                        <span class="s2">&quot;rain_probability&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">rain_probability</span><span class="p">,</span>
+                        <span class="s2">&quot;wind_speed&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">wind_speed</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;weekly_forecast&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">day</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">week_forecast</span><span class="p">],</span>
+                    <span class="s2">&quot;suggestions&quot;</span><span class="p">:</span> <span class="n">suggestions</span>
+                <span class="p">}</span>
+
+                <span class="c1"># Envia os dados serializados em JSON para o cliente</span>
+                <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">forecast_data</span><span class="p">))</span>
+
+                <span class="c1"># Aguarda 30 segundos para a próxima atualização</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Em caso de erro, envia mensagem de erro e encerra loop</span>
+                <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}))</span>
+                <span class="k">break</span></div>
+
+
+<div class="viewcode-block" id="WebSocketServer.connection">
+<a class="viewcode-back" href="../../../backend.server.websockets.html#backend.server.websockets.WebSocketServer.connection">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">websocket</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gerencia a conexão websocket com o cliente, recebendo parâmetros iniciais</span>
+<span class="sd">        e iniciando o envio periódico de atualizações.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            websocket: conexão websocket ativa.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Aguarda mensagem JSON do cliente com parâmetros</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+            <span class="c1"># Atualiza dados compartilhados com lock</span>
+            <span class="k">with</span> <span class="n">body_data</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+                <span class="n">body_data</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;forecast&quot;</span> <span class="ow">and</span> <span class="s2">&quot;latitude&quot;</span> <span class="ow">in</span> <span class="n">payload</span> <span class="ow">and</span> <span class="s2">&quot;longitude&quot;</span> <span class="ow">in</span> <span class="n">payload</span><span class="p">:</span>
+                    <span class="n">body_data</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">LocationFactory</span><span class="o">.</span><span class="n">from_lat_lon</span><span class="p">(</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">],</span> <span class="n">payload</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;location&quot;</span> <span class="ow">and</span> <span class="s2">&quot;place&quot;</span> <span class="ow">in</span> <span class="n">payload</span><span class="p">:</span>
+                    <span class="n">body_data</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">LocationFactory</span><span class="o">.</span><span class="n">from_place</span><span class="p">(</span><span class="n">payload</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Parâmetros ausentes place, lat e lon&quot;</span><span class="p">}))</span>
+                    <span class="k">return</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cliente conectado. Iniciando envio de dados para </span><span class="si">{</span><span class="n">body_data</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">place</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># Inicia envio contínuo de atualizações</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_update</span><span class="p">(</span><span class="n">websocket</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">websockets</span><span class="o">.</span><span class="n">ConnectionClosed</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Conexão encerrada&quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Erro na conexão: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="WebSocketServer.run">
+<a class="viewcode-back" href="../../../backend.server.websockets.html#backend.server.websockets.WebSocketServer.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Inicializa e executa o servidor WebSocket assincronamente,</span>
+<span class="sd">        aceitando conexões no host e porta configurados.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">():</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="o">.</span><span class="n">serve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_port</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Servidor WebSocket rodando em ws://</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">()</span>  <span class="c1"># Mantém o servidor rodando indefinidamente</span>
+
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">start</span><span class="p">())</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">GestAgro</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Módulos do Sistema:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">backend</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Componentes Principais:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.main.html">backend.main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.api.html">backend.api package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.controllers.html">backend.controllers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.models.html">backend.models package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.server.html">backend.server package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../backend.strategies.html">backend.strategies package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Seu Nome.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

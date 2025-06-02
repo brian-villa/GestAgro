@@ -2,7 +2,7 @@ from threading import Lock
 
 class BodyData:
     """
-    Singleton thread-safe para armazenar dados compartilhados no corpo da requisição,
+    Singleton thread para armazenar dados compartilhados no corpo da requisição,
     como localização e prioridade.
 
     A implementação garante que apenas uma instância de BodyData exista durante a execução,

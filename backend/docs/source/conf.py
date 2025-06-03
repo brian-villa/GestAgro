@@ -1,52 +1,45 @@
 import os
 import sys
+from pathlib import Path
 
-# Adicionar caminhos para encontrar os módulos
-sys.path.insert(0, os.path.abspath('../..'))  # backend/
-sys.path.insert(0, os.path.abspath('../../..'))  # GestAgro/
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..'))
+sys.path.insert(0, project_root)
 
-# Configurações do projeto
-project = 'GestAgro'
-copyright = '2024, Seu Nome'
-author = 'Seu Nome'
+# Adiciona a pasta 'backend' ao sys.path também, caso suas importações internas a utilizem como base
+backend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))
+sys.path.insert(0, backend_path)
+
+# Verifique se o caminho está correto
+print(f"Project root added to sys.path: {project_root}")
+print(f"Backend path added to sys.path: {backend_path}")
+print(f"Current Python path: {sys.path}")
+
+# -- Project information -----------------------------------------------------
+project = 'Weather Watcher'
+copyright = '2025, Brian Villanova and Caique Silva'
+author = 'Brian Villanova and Caique Silva'
+version = '1.0'
 release = '1.0.0'
 
-# Extensões necessárias
+# -- General configuration ---------------------------------------------------
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
+    'sphinx.ext.githubpages',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
 ]
 
-# Mock para dependências externas que podem não estar instaladas
-autodoc_mock_imports = [
-    'requests',
-    'flask',
-    'websockets',
-    'asyncio',
-    'pandas',
-    'numpy',
-    'datetime',
-    'json',
-    'typing',
-    'pydantic',
-    'fastapi',
-    'uvicorn',
-    'pytest',
-    'sqlalchemy',
-    'aiofiles',
-]
-
-# Configurações de template e build
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+language = 'pt'
 
-# Tema HTML
-html_theme = 'alabaster'
-html_static_path = ['_static']
+# -- Options for HTML output -------------------------------------------------
+html_theme = 'sphinx_rtd_theme'
 
-# Configurações do autodoc
+# -- Extension configuration -------------------------------------------------
 autodoc_default_options = {
     'members': True,
     'member-order': 'bysource',
@@ -55,12 +48,8 @@ autodoc_default_options = {
     'exclude-members': '__weakref__'
 }
 
-# Configurações do Napoleon para docstrings
 napoleon_google_docstring = True
 napoleon_numpy_docstring = True
 napoleon_include_init_with_doc = False
 napoleon_include_private_with_doc = False
-
-# Configurações HTML adicionais
-html_title = f"{project} Documentation"
-html_short_title = project
+todo_include_todos = True

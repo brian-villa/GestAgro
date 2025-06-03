@@ -1,6 +1,11 @@
 backend.server package
 ======================
 
+.. automodule:: backend.server
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Submodules
 ----------
 
@@ -8,11 +13,3 @@ Submodules
    :maxdepth: 4
 
    backend.server.websockets
-
-Module contents
----------------
-
-.. automodule:: backend.server
-   :members:
-   :show-inheritance:
-   :undoc-members:

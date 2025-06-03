@@ -1,6 +1,11 @@
 backend.tests package
 =====================
 
+.. automodule:: backend.tests
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Submodules
 ----------
 
@@ -11,11 +16,3 @@ Submodules
    backend.tests.test_forecast
    backend.tests.test_location
    backend.tests.test_suggestion
-
-Module contents
----------------
-
-.. automodule:: backend.tests
-   :members:
-   :show-inheritance:
-   :undoc-members:

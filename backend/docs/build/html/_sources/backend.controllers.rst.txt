@@ -1,6 +1,11 @@
 backend.controllers package
 ===========================
 
+.. automodule:: backend.controllers
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Submodules
 ----------
 
@@ -9,11 +14,3 @@ Submodules
 
    backend.controllers.ForecastController
    backend.controllers.LocationController
-
-Module contents
----------------
-
-.. automodule:: backend.controllers
-   :members:
-   :show-inheritance:
-   :undoc-members:

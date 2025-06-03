@@ -1,6 +1,6 @@
 import threading
-from api.api import FlaskAPI
-from server.websockets import WebSocketServer
+from backend.api.api import FlaskAPI
+from backend.server.websockets import WebSocketServer
 
 def main():
     """

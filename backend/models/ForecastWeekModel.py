@@ -1,5 +1,5 @@
-from models.LocationModel import LocationModel
-from models.ForecastModel import ForecastModel
+from backend.models.LocationModel import LocationModel
+from backend.models.ForecastModel import ForecastModel
 
 class ForecastWeekModel:
     """

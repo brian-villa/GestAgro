@@ -1,4 +1,4 @@
-from backend.models.factories.LocationFactory import LocationFactory
+from models.factories.LocationFactory import LocationFactory
 
 def test_from_place():
     """

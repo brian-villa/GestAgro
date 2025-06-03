@@ -1,7 +1,7 @@
-from backend.api.open_weather_call import get_forecast_open_weather, forecast_weekly 
-from backend.models.ForecastModel import ForecastModel
-from backend.models.ForecastWeekModel import ForecastWeekModel
-from backend.models.LocationModel import LocationModel
+from api.open_weather_call import get_forecast_open_weather, forecast_weekly 
+from models.ForecastModel import ForecastModel
+from models.ForecastWeekModel import ForecastWeekModel
+from models.LocationModel import LocationModel
 
 class ForecastFactory:
     """

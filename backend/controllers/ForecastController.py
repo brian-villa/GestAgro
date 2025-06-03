@@ -1,7 +1,7 @@
 from flask import jsonify, request, Blueprint
-from backend.models.factories.LocationFactory import LocationFactory
-from backend.models.factories.ForecastFactory import ForecastFactory
-from backend.strategies.SuggestionStrategy import (
+from models.factories.LocationFactory import LocationFactory
+from models.factories.ForecastFactory import ForecastFactory
+from strategies.SuggestionStrategy import (
     WindStrategy,
     RainStrategy,
     TemperatureStrategy,

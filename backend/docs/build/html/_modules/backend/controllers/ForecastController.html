@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>backend.controllers.ForecastController &mdash; Documentação Weather Watcher 1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=c4403577"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaedd51"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Weather Watcher
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Pesquisar docs" aria-label="Pesquisar docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navegação">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">backend</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Menu de navegação móvel" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Weather Watcher</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Navegação da página">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Código do módulo</a></li>
+      <li class="breadcrumb-item active">backend.controllers.ForecastController</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fonte de backend.controllers.ForecastController</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">Blueprint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">backend.models.factories.LocationFactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocationFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">backend.models.factories.ForecastFactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ForecastFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">backend.strategies.SuggestionStrategy</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">WindStrategy</span><span class="p">,</span>
+    <span class="n">RainStrategy</span><span class="p">,</span>
+    <span class="n">TemperatureStrategy</span><span class="p">,</span>
+    <span class="n">PrecipitationStrategy</span><span class="p">,</span>
+    <span class="n">HumidityStrategy</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Define o blueprint da rota de previsão</span>
+<span class="n">forecast_flask</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s2">&quot;forecast&quot;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="forecast">
+<a class="viewcode-back" href="../../../backend.controllers.ForecastController.html#backend.controllers.ForecastController.forecast">[documentos]</a>
+<span class="nd">@forecast_flask</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/forecast&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">forecast</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Rota para obter a previsão do tempo com base em latitude e longitude.</span>
+
+<span class="sd">    Esta rota espera um JSON com os dados de latitude, longitude e uma prioridade mínima para sugestões.</span>
+
+<span class="sd">    Corpo da requisição (JSON):</span>
+
+<span class="sd">    {</span>
+<span class="sd">    &quot;latitude&quot;: float,</span>
+<span class="sd">    &quot;longitude&quot;: float,</span>
+<span class="sd">    &quot;priority&quot;: int (opcional)</span>
+<span class="sd">    }</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        JSON: Contém informações sobre a localização, previsão diária, previsão semanal e sugestões baseadas nas condições climáticas.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">json</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">priority</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Validação: latitude e longitude são obrigatórios</span>
+    <span class="k">if</span> <span class="n">lat</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">lon</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Latitude e Longitude estão vazios&quot;</span><span class="p">}),</span> <span class="mi">400</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Criação do modelo de localização a partir de latitude e longitude</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">LocationFactory</span><span class="o">.</span><span class="n">from_lat_lon</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="n">lon</span><span class="p">)</span>
+
+        <span class="c1"># Obtém a previsão do dia e a semanal</span>
+        <span class="n">forecast</span> <span class="o">=</span> <span class="n">ForecastFactory</span><span class="o">.</span><span class="n">dailyForecast</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">location</span><span class="p">)</span>
+        <span class="n">week_forecast</span> <span class="o">=</span> <span class="n">ForecastFactory</span><span class="o">.</span><span class="n">weeklyForecast</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="n">location</span><span class="p">)</span>
+
+        <span class="c1"># Define as estratégias de sugestão baseadas no clima</span>
+        <span class="n">strategies</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">WindStrategy</span><span class="p">(),</span>
+            <span class="n">RainStrategy</span><span class="p">(),</span>
+            <span class="n">TemperatureStrategy</span><span class="p">(),</span>
+            <span class="n">PrecipitationStrategy</span><span class="p">(),</span>
+            <span class="n">HumidityStrategy</span><span class="p">(),</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Executa cada estratégia e filtra as sugestões com base na prioridade mínima</span>
+        <span class="n">suggestions</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">strat</span><span class="o">.</span><span class="n">get_suggest</span><span class="p">(</span><span class="n">forecast</span><span class="p">)</span> <span class="k">for</span> <span class="n">strat</span> <span class="ow">in</span> <span class="n">strategies</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">priority</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Converte a previsão semanal em uma lista de dicionários</span>
+        <span class="n">weekly_forecast</span> <span class="o">=</span> <span class="p">[</span><span class="n">day</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">week_forecast</span><span class="p">]</span>
+
+        <span class="c1"># Retorna a resposta JSON com os dados coletados e processados</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;latitude&quot;</span><span class="p">:</span> <span class="n">location</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span>
+                <span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="n">location</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span>
+                <span class="s2">&quot;place&quot;</span><span class="p">:</span> <span class="n">location</span><span class="o">.</span><span class="n">place</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;forecast&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
+                <span class="s2">&quot;temperature&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span>
+                <span class="s2">&quot;minTemperature&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">minTemperature</span><span class="p">,</span>
+                <span class="s2">&quot;maxTemperature&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">maxTemperature</span><span class="p">,</span>
+                <span class="s2">&quot;humidity&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">humidity</span><span class="p">,</span>
+                <span class="s2">&quot;precipitation&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">precipitation</span><span class="p">,</span>
+                <span class="s2">&quot;rain_probability&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">rain_probability</span><span class="p">,</span>
+                <span class="s2">&quot;wind_speed&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">wind_speed</span><span class="p">,</span>
+                <span class="s2">&quot;sunrise&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">sunrise</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="k">if</span> <span class="n">forecast</span><span class="o">.</span><span class="n">sunrise</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;sunset&quot;</span><span class="p">:</span> <span class="n">forecast</span><span class="o">.</span><span class="n">sunset</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="k">if</span> <span class="n">forecast</span><span class="o">.</span><span class="n">sunset</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">},</span>
+
+            <span class="s2">&quot;weekly_forecast&quot;</span><span class="p">:</span> <span class="n">weekly_forecast</span><span class="p">,</span>
+            <span class="s2">&quot;suggestions&quot;</span><span class="p">:</span> <span class="n">suggestions</span>
+        <span class="p">})</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Em caso de erro, retorna código 500 com a mensagem da exceção</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)}),</span> <span class="mi">500</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Brian Villanova and Caique Silva.</p>
+  </div>
+
+  Compilado com <a href="https://www.sphinx-doc.org/">Sphinx</a> usando um
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    fornecido por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

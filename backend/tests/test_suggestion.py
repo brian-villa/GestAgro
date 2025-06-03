@@ -1,4 +1,4 @@
-from strategies.SuggestionStrategy import WindStrategy
+from backend.strategies.SuggestionStrategy import WindStrategy
 from types import SimpleNamespace
 
 def test_strategy_generates_suggestion():

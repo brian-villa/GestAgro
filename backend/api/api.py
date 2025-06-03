@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-from controllers.ForecastController import forecast_flask
-from controllers.LocationController import location_flask
+from backend.controllers.ForecastController import forecast_flask
+from backend.controllers.LocationController import location_flask
 
 class FlaskAPI:
     """

@@ -2,7 +2,7 @@ from threading import Lock
 
 class BodyData:
     """
-    Singleton thread-safe para armazenar dados compartilhados no corpo da requisição,
+    Singleton thread para armazenar dados compartilhados no corpo da requisição,
     como localização e prioridade.
 
     A implementação garante que apenas uma instância de BodyData exista durante a execução,
@@ -24,7 +24,7 @@ class BodyData:
         Returns:
             BodyData: Instância única da classe BodyData.
         """
-        with cls._lock:  # Garante exclusão mútua na criação da instância
+        with cls._lock:
             if cls._instance is None:
                 cls._instance = super(BodyData, cls).__new__(cls)
                 cls._instance.lock = Lock()  # Lock para controlar acesso aos atributos da instância

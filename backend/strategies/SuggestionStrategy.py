@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from models.ForecastModel import ForecastModel
+from backend.models.ForecastModel import ForecastModel
 
 class SuggestionStrategy(ABC):
     """

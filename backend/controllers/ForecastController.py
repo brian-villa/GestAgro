@@ -1,7 +1,7 @@
 from flask import jsonify, request, Blueprint
-from models.factories.LocationFactory import LocationFactory
-from models.factories.ForecastFactory import ForecastFactory
-from strategies.SuggestionStrategy import (
+from backend.models.factories.LocationFactory import LocationFactory
+from backend.models.factories.ForecastFactory import ForecastFactory
+from backend.strategies.SuggestionStrategy import (
     WindStrategy,
     RainStrategy,
     TemperatureStrategy,
@@ -15,21 +15,25 @@ forecast_flask = Blueprint("forecast", __name__)
 
 @forecast_flask.route("/forecast", methods=["POST"])
 def forecast():
-    """Rota para obter a previsão do tempo com base em latitude e longitude.
+    """
+
+    Rota para obter a previsão do tempo com base em latitude e longitude.
 
     Esta rota espera um JSON com os dados de latitude, longitude e uma prioridade mínima para sugestões.
 
     Corpo da requisição (JSON):
 
-        {
-            "latitude": float,
-            "longitude": float,
-            "priority": int (opcional)
-        }
+    {
+    "latitude": float,
+    "longitude": float,
+    "priority": int (opcional)
+    }
 
     Returns:
         JSON: Contém informações sobre a localização, previsão diária, previsão semanal e sugestões baseadas nas condições climáticas.
+
     """
+    
     data = request.json
     lat = data.get("latitude")
     lon = data.get("longitude")

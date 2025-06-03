@@ -1,6 +1,11 @@
 backend package
 ===============
 
+.. automodule:: backend
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Subpackages
 -----------
 
@@ -21,11 +26,3 @@ Submodules
    :maxdepth: 4
 
    backend.main
-
-Module contents
----------------
-
-.. automodule:: backend
-   :members:
-   :show-inheritance:
-   :undoc-members:

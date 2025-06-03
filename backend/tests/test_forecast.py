@@ -1,5 +1,5 @@
-from backend.models.factories.LocationFactory import LocationFactory
-from backend.models.factories.ForecastFactory import ForecastFactory
+from models.factories.LocationFactory import LocationFactory
+from models.factories.ForecastFactory import ForecastFactory
 
 def test_daily_forecast_returns_valid_data():
     """

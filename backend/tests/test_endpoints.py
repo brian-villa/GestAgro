@@ -1,5 +1,5 @@
 
-from backend.main import main
+from main import main
 
 def test_forecast_endpoint(mocker):
     """

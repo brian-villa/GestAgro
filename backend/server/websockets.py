@@ -1,10 +1,10 @@
 import asyncio
 import websockets
 import json
-from backend.api.body_data import BodyData
-from backend.models.factories.LocationFactory import LocationFactory
-from backend.models.factories.ForecastFactory import ForecastFactory
-from backend.strategies.SuggestionStrategy import WindStrategy, RainStrategy, TemperatureStrategy, PrecipitationStrategy, HumidityStrategy
+from api.body_data import BodyData
+from models.factories.LocationFactory import LocationFactory
+from models.factories.ForecastFactory import ForecastFactory
+from strategies.SuggestionStrategy import WindStrategy, RainStrategy, TemperatureStrategy, PrecipitationStrategy, HumidityStrategy
 
 body_data = BodyData()
 

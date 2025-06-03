@@ -1,5 +1,5 @@
-from backend.models import ForecastModel
-from backend.strategies import SuggestionStrategy
+from models import ForecastModel
+from strategies import SuggestionStrategy
 
 class SuggestionModel:
     """

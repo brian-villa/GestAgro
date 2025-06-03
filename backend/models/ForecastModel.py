@@ -1,4 +1,4 @@
-from backend.models import LocationModel
+from models import LocationModel
 
 class ForecastModel:
     """

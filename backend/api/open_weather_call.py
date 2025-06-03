@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from datetime import datetime
 
-from backend.models.ForecastModel import ForecastModel
+from models.ForecastModel import ForecastModel
 
 # Carrega variáveis de ambiente do arquivo .env.local
 dotenv_path = Path(__file__).resolve().parents[1] / "env" / ".env.local"

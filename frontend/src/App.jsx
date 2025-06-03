@@ -7,11 +7,11 @@ import WeatherPage from "./pages/WeatherPage";
 function App() {
   return (
     <BrowserRouter>
-      <div className="w-full h-screen flex flex-col items-center bg-gradient-to-b from-blue-900 to-blue-500">
+      <div className="w-full h-screen flex flex-col items-center bg-gradient-to-b from-blue-900 to-blue-600 pb-5">
         <Header />
         <Routes>
           <Route path="/" element={<Index />} /> {/* Rota padrao do site */}
-          <Route path="/Previsao" element={<WeatherPage />} />
+          <Route path="/forecast" element={<WeatherPage />} />
         </Routes>
       </div>
     </BrowserRouter>

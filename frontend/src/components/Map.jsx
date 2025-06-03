@@ -62,7 +62,7 @@ function Mapa() {
     };
 
   const handleConfirm = () => {
-    navigate('/Previsao', { state: { forecastData} }); //vai pra pagina previsao e armazena os dados do backend 
+    navigate('/forecast', { state: { forecastData} }); //vai pra pagina previsao e armazena os dados do backend 
   };
 
 

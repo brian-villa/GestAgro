@@ -7,7 +7,7 @@ function Header(){
     const [isHovered, setIsHovered] = useState(false);
 
     return(
-        <div className="flex w-full p-5">
+        <div className="flex w-full ">
             <img 
                 src={isHovered ? LogoHover : Logo}
                 onMouseEnter={() => setIsHovered(true)}

@@ -89,7 +89,7 @@ def forecast():
                 "sunset": forecast.sunset.isoformat() if forecast.sunset else None
             },
 
-            "weekly_forecast": weekly_forecast,
+            "daily_forecast": weekly_forecast,
             "suggestions": suggestions
         })
 

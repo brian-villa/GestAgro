@@ -9,7 +9,12 @@ function WeatherPage(){
     const [cidade, setCidade] = useState("");
     const [forecastIndex, setForecastIndex] = useState(0);
     const [indexHour, setIndexHour] = useState(3);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const sortedSuggestions = [...(data.suggestions || [])]
+        .sort((a, b) => b.priority - a.priority)
+        .slice(0, 3); // pega só as 3 maiores prioridades
     
 
     const sunriseTime = new Date(data.forecast?.sunrise).toLocaleTimeString("pt-BR", {
@@ -41,10 +46,14 @@ function WeatherPage(){
         e.preventDefault();
 
         if (!cidade.trim()) return;
+        setLoading(true); 
         
         const data = await fetchLocationName(cidade.trim());
 
+        setLoading(false);
+
         if (data) {
+            setCidade("");
             navigate('/forecast', { state: { forecastData: data } });
         } else {
             alert("Cidade não encontrada.");
@@ -57,7 +66,7 @@ function WeatherPage(){
     }
 
     const handleNext = () => {
-        if (forecastIndex < data.weekly_forecast.length - 1) {
+        if (forecastIndex < data.daily_forecast.length - 1) {
             setForecastIndex(forecastIndex + 1);
             setIndexHour(indexHour + 3);
         }
@@ -70,12 +79,31 @@ function WeatherPage(){
         }
     };
 
+    function getPriorityColor(priority) {
+        switch (priority) {
+            case 5: return "border-red-700";
+            case 4: return "border-red-500";
+            case 3: return "border-yellow-400";
+            case 2: return "border-blue-300";
+            case 1: return "border-white";
+            default: return "border-gray-200";
+        }
+    }
+
     return (
         <>
+            {loading && (
+                <div className="fixed inset-0 bg-gradient-to-b from-blue-900 to-blue-400 bg-opacity-30 z-50 flex flex-col items-center justify-center">
+                    <Icon icon="eos-icons:loading" className="w-16 h-16 text-white animate-spin" />
+                    <span className="text-white mt-4 text-lg">Carregando previsão...</span>
+                </div>
+            )}
+
             <form onSubmit={handleConfirm} className="w-full flex justify-center">
                 <input
                     type="text"
                     id="cidadeTxt"
+                    value={cidade}
                     placeholder="Digite a sua cidade"
                     onChange={(e) => setCidade(e.target.value)}
                     onKeyPress={(e) => {
@@ -90,7 +118,7 @@ function WeatherPage(){
                 />
             </form>
 
-            <div className="w-[80%] sm:w-[66%] flex flex-col items-center p-4 rounded-lg shadow-lg bg-gradient-to-b from-blue-900 to-blue-500 ">
+            <div className="w-[80%] sm:w-[66%] flex flex-col items-center p-4 rounded-lg shadow-lg bg-gradient-to-b from-blue-500 to-blue-700 ">
                 <h1 className="font-bold text-center text-3xl sm:text-4xl">{capitalizeFirstLetter(data.location?.place)}</h1>
                 <div className="flex justify-between mb-5 w-[100%] text-white text-lg font-semibold">
                     <div className="flex items-center space-x-2">
@@ -122,10 +150,9 @@ function WeatherPage(){
                         </div>
                     ))}
                 </div>
-                <div className="w-full border-t-3 border-white rounded-full" />
             </div>
             <div className="w-[80%] sm:w-[66%] h-[30%] sm:h-[20%] flex justify-between mt-1">
-                <div className="w-[60%] flex flex-col items-center p-2 rounded-lg shadow-lg bg-gradient-to-b from-blue-500 to-blue-900 ">
+                <div className="w-[50%] h-full sm:h-[85%] flex flex-col items-center p-2 rounded-lg shadow-lg bg-gradient-to-b from-blue-600 to-blue-900 ">
                     <div className="flex w-full">
                         <h1 className="font-bold text-sm sm:text-md"> Previsão para as próximas {indexHour} horas</h1>
                         <div className="flex">
@@ -141,47 +168,61 @@ function WeatherPage(){
                     </div>
                     <div className="w-full border-t-3 border-white rounded-full mb-2"/>
                     <div className="w-full text-white">
+
                         <div className="flex items-center justify-center sm:hidden mb-3">
-                            <span className="font-bold text-3xl mr-2">
-                                {Math.round(data.weekly_forecast?.[forecastIndex].maxTemperature)}°
+                            <span className="font-bold text-2xl sm:text-3xl mr-2">
+                                {Math.round(data.daily_forecast?.[forecastIndex].maxTemperature)}°
                             </span>
-                            <span>{Math.round(data.weekly_forecast?.[forecastIndex].minTemperature)}°</span>
+                            <span>{Math.round(data.daily_forecast?.[forecastIndex].minTemperature)}°</span>
                         </div>
-                        <div className="grid grid-cols-2 sm:flex sm:justify-around gap-2">
+
+                        <div className="grid grid-cols-2 sm:flex sm:justify-around gap-2 text-sm sm:text-base">
             
                             <div className="hidden sm:flex items-center">
                                 <span className="font-bold text-3xl mr-2">
-                                    {Math.round(data.weekly_forecast?.[forecastIndex].maxTemperature)}°
+                                    {Math.round(data.daily_forecast?.[forecastIndex].maxTemperature)}°
                                 </span>
-                                <span>{Math.round(data.weekly_forecast?.[forecastIndex].minTemperature)}°</span>
+                                <span>{Math.round(data.daily_forecast?.[forecastIndex].minTemperature)}°</span>
                             </div>
 
                             <div className="flex items-center">
-                                <Icon icon="wi:rain" className="w-8 h-8 mr-1" />
-                                <span className="font-light">{data.weekly_forecast?.[forecastIndex].precipitation} mm</span>
+                                <Icon icon="wi:rain" className="w-6 sm:w-8 h-6 sm:h-8 mr-1" />
+                                <span className="font-light text-sm sm:text-md">{data.daily_forecast?.[forecastIndex].precipitation} mm</span>
                             </div>
 
                             <div className="flex items-center">
-                                <Icon icon="wi:showers" className="w-8 h-8 mr-1" />
-                                <span className="font-light">{data.weekly_forecast?.[forecastIndex].rain_probability}%</span>
+                                <Icon icon="wi:showers" className="w-6 sm:w-8 h-6 sm:h-8 mr-1" />
+                                <span className="font-light text-sm sm:text-md">{data.daily_forecast?.[forecastIndex].rain_probability}%</span>
                             </div>
 
                             <div className="flex items-center">
-                                <Icon icon="wi:strong-wind" className="w-8 h-8 mr-1" />
-                                <span className="font-light">
-                                    {Math.round(data.weekly_forecast?.[forecastIndex].wind_speed)} km/h
+                                <Icon icon="wi:strong-wind" className="w-6 sm:w-8 h-6 sm:h-8 mr-1" />
+                                <span className="font-light text-sm sm:text-md">
+                                    {Math.round(data.daily_forecast?.[forecastIndex].wind_speed)} km/h
                                 </span>
                             </div>
 
                             <div className="flex items-center">
-                                <Icon icon="wi:humidity" className="w-8 h-8 mr-1" />
-                                <span className="font-light">{data.weekly_forecast?.[forecastIndex].humidity}%</span>
+                                <Icon icon="wi:humidity" className="w-6 sm:w-8 h-6 sm:h-8 mr-1" />
+                                <span className="font-light text-sm sm:text-md">{data.daily_forecast?.[forecastIndex].humidity}%</span>
                             </div>
+
                         </div>
                     </div>
                 </div>   
-                <div className=" w-[39%] sm:w-[39.5%] flex flex-col items-center p-4 rounded-lg shadow-lg bg-gradient-to-b from-blue-500 to-blue-900  ">
-                    
+                <div className="w-[49%] sm:w-[49.5%] h-full sm:h-[85%] flex flex-col items-center p-2 rounded-lg shadow-lg bg-gradient-to-b from-blue-600 to-blue-900 overflow-hidden">
+                    <div className="flex w-full">
+                        <h1 className="font-bold text-sm sm:text-md">Sugestões para hoje</h1>
+                    </div>
+                    <div className="w-full border-t-3 border-white rounded-full mb-1 mt-1"/>
+                    <div className="flex flex-col space-y-2 w-full sm:overflow-y-scroll scroll-container p-2" >
+                        {sortedSuggestions.map((item, index) => (
+                            <div key={index} className={`flex items-center space-x-2 bg-blue-600 p-1 rounded-full shadow w-full border-2 ${getPriorityColor(item.priority)}`}>
+                                <Icon icon={item.icon} className="w-6 h-6 text-white"/>
+                                <span className="text-white text-xs sm:text-sm font-light">{item.message}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>           
             </div>
         </>

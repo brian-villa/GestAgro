@@ -55,7 +55,7 @@ class WindStrategy(SuggestionStrategy):
 
         if wind_speed > 40:
             self.message = "Ventos extremos."
-            self.icon = "wi:storm-warning"
+            self.icon = "wi:cloudy-gusts"
             self.priority = 5
         elif wind_speed > 25:
             self.message = "Ventos fortes."
@@ -140,7 +140,7 @@ class TemperatureStrategy(SuggestionStrategy):
             self.icon = "wi:cloud"
             self.priority = 1
         elif temperature > 0:
-            self.message = "Temperatura baixa. Risco de geada em regiões frias."
+            self.message = "Temperatura baixa. Risco de geada."
             self.icon = "wi:snowflake-cold"
             self.priority = 4
         else:
@@ -199,26 +199,25 @@ class HumidityStrategy(SuggestionStrategy):
 
         if humidity > 80:
             self.message = (
-                "Umidade muito alta! Pode causar desconforto, sensação de calor e "
-                "aumentar risco de mofo em casa."
+                "Umidade muito alta! Pode causar desconforto."
             )
             self.icon = "wi:humidity"
             self.priority = 5
         elif humidity > 60:
-            self.message = "Umidade elevada. Mantenha ambientes ventilados."
-            self.icon = "wi:day-humidity"
+            self.message = "Umidade elevada."
+            self.icon = "wi:sprinkle"
             self.priority = 4
         elif humidity > 40:
-            self.message = "Umidade agradável para atividades ao ar livre e conforto respiratório."
+            self.message = "Umidade agradável."
             self.icon = "wi:day-sunny"
             self.priority = 1
         elif humidity > 20:
-            self.message = "Umidade baixa. Cuidado com ressecamento das vias respiratórias."
+            self.message = "Umidade baixa."
             self.icon = "wi:day-cloudy"
             self.priority = 4
         else:
-            self.message = "Umidade muito baixa! Hidrate-se bem e use umidificadores para evitar desconforto."
-            self.icon = "wi:dry"
+            self.message = "Umidade muito baixa!"
+            self.icon = "wi:hot"
             self.priority = 5
 
         return self.to_dict()

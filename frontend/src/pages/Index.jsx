@@ -63,6 +63,7 @@ function Index() {
 
   return (
     <div className="flex flex-col items-center h-full w-full">
+      
       <h1
         className={`font-bold text-center text-3xl mb-3 transition-opacity duration-700 ease-in-out cursor-default ${ 
           fadeInH1 ? "opacity-100" : "opacity-0"

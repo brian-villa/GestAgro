@@ -1,5 +1,4 @@
-
-[English Version](#weatherforecast-web-app-(english))
+[English Version](#weatherforecast-web-app-english)
 
 # WeatherForecast Web App
 
